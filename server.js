@@ -32,3 +32,15 @@ app.get('/allalbums', async (req, res) => {
         res.status(500).json({ message: 'Server error for nirvana'});
     }
 })
+
+app.post('/addalbum', async (req, res) => {
+    const { album_name, album_pic} = req.body;
+    try {
+        let connection = await mysql.createConnection({dbConfig})
+        await connection.execute('INSERT INTO nirvana (album_name, album_pic) VALUES (?,?)', [album_name, album_pic]);
+        res.status(201).json({message: `Card ${album_name} added successfully.`});
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({message: `Server Error - could not add card ${album_name}`});
+    }
+});
