@@ -60,7 +60,7 @@ app.delete('/deletealbum/:id', async (req, res) => {
 
 app.put('/updatealbum/:id', async (req, res) => {
     const id = req.params.id;
-    const { album_name, album_pic } = req.body;
+    const {album_name, album_pic} = req.body;
     try {
         let connection = await mysql.createConnection(dbConfig);
         await connection.execute(
@@ -68,9 +68,9 @@ app.put('/updatealbum/:id', async (req, res) => {
             [album_name, album_pic, id]
         );
         await connection.end();
-        res.status(200).json({ message: `Album ID ${id} has been updated successfully.` });
-    } catch(err) {
+        res.status(200).json({message: `Album ID ${id} has been updated successfully.`});
+    } catch (err) {
         console.log(err);
-        res.status(500).json({ message: `Server Error - could not update album ${id}` });
+        res.status(500).json({message: `Server Error - could not update album ${id}`});
     }
 });
