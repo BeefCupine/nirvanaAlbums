@@ -46,19 +46,31 @@ app.post('/addalbum', async (req, res) => {
 });
 
 app.delete('/deletealbum/:id', async (req, res) => {
-    const albumId = req.params.id;
-
+    const id = req.params.id;
     try {
         let connection = await mysql.createConnection(dbConfig);
-
-        // Delete the album
-        await connection.execute('DELETE FROM nirvana WHERE id = ?', [albumId]);
+        await connection.execute('DELETE FROM nirvana WHERE id = ?', [id]);
         await connection.end();
-
-        res.status(200).json({ message: `Album ID ${albumId} deleted successfully.` });
-
+        res.status(200).json({ message: `Album ID ${id} deleted successfully.` });
     } catch(err) {
         console.log(err);
-        res.status(500).json({ message: `Server Error - could not delete album ${albumId}` });
+        res.status(500).json({ message: `Server Error - could not delete album ${id}` });
+    }
+});
+
+app.put('/updatealbum/:id', async (req, res) => {
+    const id = req.params.id;
+    const { album_name, album_pic } = req.body;
+    try {
+        let connection = await mysql.createConnection(dbConfig);
+        await connection.execute(
+            'UPDATE nirvana SET album_name = ?, album_pic = ? WHERE id = ?',
+            [album_name, album_pic, id]
+        );
+        await connection.end();
+        res.status(200).json({ message: `Album ID ${id} has been updated successfully.` });
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ message: `Server Error - could not update album ${id}` });
     }
 });
