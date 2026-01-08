@@ -44,3 +44,21 @@ app.post('/addalbum', async (req, res) => {
         res.status(500).json({message: `Server Error - could not add album ${album_name}`});
     }
 });
+
+app.delete('/deletealbum/:id', async (req, res) => {
+    const albumId = req.params.id;
+
+    try {
+        let connection = await mysql.createConnection(dbConfig);
+
+        // Delete the album
+        await connection.execute('DELETE FROM nirvana WHERE id = ?', [albumId]);
+        await connection.end();
+
+        res.status(200).json({ message: `Album ID ${albumId} deleted successfully.` });
+
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ message: `Server Error - could not delete album ${albumId}` });
+    }
+});
